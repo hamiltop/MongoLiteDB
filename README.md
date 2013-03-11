@@ -10,7 +10,7 @@ Motive
 
 NoSQL is a complicated and touchy subject these days. Some people love it, some people hate it. Some proponents say it gives them flexibility in how they structure their data so they can focus on application logic rather than how data is stored. Opponents say that "NoSQL is for people who don't understand relational databases" (that's a quote, source provided upon request).
 
-Every flavor of database software has its strengths and weaknesses. The strengths are the result of optimization, the weaknesses teh result of informed decisions (at least, I hope that's how it works). MongoLiteDB is no different. The things we want to optimize are ease of use and well... ease of use.
+Every flavor of database software has its strengths and weaknesses. The strengths are the result of optimization, the weaknesses the result of informed decisions (at least, I hope that's how it works). MongoLiteDB is no different. The things we want to optimize are ease of use and well... ease of use.
 
 Ease of Use
 -----------
@@ -20,7 +20,7 @@ The project came about via a random weekend hack. I wanted to play around with s
 Performance
 -----------
 
-Performance sucks. I haven't even bother to test it yet. I'm literally dumping a one big json object to a file. To perform queries, I read it in and iterate over every document that is nested inside it. Performance is therefore O(n) where n is the number of documents in the database. But I don't really care. For my use case, performance is overrated.
+Performance sucks. I haven't even bothered to benchmark it yet. I'm literally dumping one big json object to a file. To perform queries, I read it in and iterate over every document that is nested inside it. Performance is therefore O(n) where n is the number of documents in the database. But I don't really care. For my use case, performance is overrated.
 
 Usage
 -----
@@ -28,20 +28,74 @@ Usage
 It was designed to be query compatible with MongoDB. I haven't implemented everything, but quite a bit is done. An example of usage is as follows:
 
     require './mongo_lite_db.rb'
+    require 'pp'
 
     filename = "demo.mglite"
     db = MongoLiteDB.new filename
 
-    db.insert({"first_name" => "Joan", "last_name" => "Of Arc", "age" => 15})
-    db.insert({"first_name" => "Joan", "last_name" => "From Madmen", "age" => 30})
-    puts db.find({"first_name" => "Joan"}).inspect
-    puts db.find({"age" => { "$lt" => 25 } }).inspect
+    db.insert({
+        "first_name" => "Joan",
+        "last_name" => "Of Arc",
+        "age" => 15,
+        "armor_size" => "small"
+    })
+    db.insert({
+        "first_name" => "Joan",
+        "last_name" => "From Madmen",
+        "age" => 30,
+        "lipstick_color" => "red"
+    })
+    db.insert({
+        "first_name" => "Joan",
+        "last_name" => "Uh (as in Jonah)",
+        "age" => 90,
+        "armor_size" => "medium",
+        "greatest_fear" => "whales"
+    })
+    puts "First Query"
+    pp db.find({"first_name" => "Joan"})
+    puts "Second Query"
+    pp db.find({"age" => { "$lt" => 25 } })
+    puts "Third Query"
+    pp db.find({"armor_size" => { "$exists" => true } })
 
 which would output:
 
-    [{"first_name"=>"Joan", "last_name"=>"Of Arc", "age"=>15, "id"=>0}, {"first_name"=>"Joan", "last_name"=>"From Madmen", "age"=>30, "id"=>1}]
-    [{"first_name"=>"Joan", "last_name"=>"Of Arc", "age"=>15, "id"=>0}]
-
+    First Query
+    [{"first_name"=>"Joan",
+      "last_name"=>"Of Arc",
+      "age"=>15,
+      "armor_size"=>"small",
+      "id"=>0},
+     {"first_name"=>"Joan",
+      "last_name"=>"From Madmen",
+      "age"=>30,
+      "lipstick_color"=>"red",
+      "id"=>1},
+     {"first_name"=>"Joan",
+      "last_name"=>"Uh (as in Jonah)",
+      "age"=>90,
+      "armor_size"=>"medium",
+      "greatest_fear"=>"whales",
+      "id"=>2}]
+    Second Query
+    [{"first_name"=>"Joan",
+      "last_name"=>"Of Arc",
+      "age"=>15,
+      "armor_size"=>"small",
+      "id"=>0}]
+    Third Query
+    [{"first_name"=>"Joan",
+      "last_name"=>"Of Arc",
+      "age"=>15,
+      "armor_size"=>"small",
+      "id"=>0},
+     {"first_name"=>"Joan",
+      "last_name"=>"Uh (as in Jonah)",
+      "age"=>90,
+      "armor_size"=>"medium",
+      "greatest_fear"=>"whales",
+      "id"=>2}]
 TODO
 ----
 
