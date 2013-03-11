@@ -1,6 +1,5 @@
 require_relative '../mongo_lite_db.rb'
 require 'fileutils'
-require 'pry'
 
 describe MongoLiteDB do
   before(:all) do

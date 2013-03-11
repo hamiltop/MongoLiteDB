@@ -1,5 +1,4 @@
 require 'json'
-require 'pry'
 
 class MongoLiteDB
     def initialize(filename="db.nsl")
