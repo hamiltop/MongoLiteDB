@@ -27,75 +27,80 @@ Usage
 
 It was designed to be query compatible with MongoDB. I haven't implemented everything, but quite a bit is done. An example of usage is as follows:
 
-    require './mongo_lite_db.rb'
-    require 'pp'
+```ruby
+require './mongo_lite_db.rb'
+require 'pp'
 
-    filename = "demo.mglite"
-    db = MongoLiteDB.new filename
+filename = "demo.mglite"
+db = MongoLiteDB.new filename
 
-    db.insert({
-        "first_name" => "Joan",
-        "last_name" => "Of Arc",
-        "age" => 15,
-        "armor_size" => "small"
-    })
-    db.insert({
-        "first_name" => "Joan",
-        "last_name" => "From Madmen",
-        "age" => 30,
-        "lipstick_color" => "red"
-    })
-    db.insert({
-        "first_name" => "Joan",
-        "last_name" => "Uh (as in Jonah)",
-        "age" => 90,
-        "armor_size" => "medium",
-        "greatest_fear" => "whales"
-    })
-    puts "First Query"
-    pp db.find({"first_name" => "Joan"})
-    puts "Second Query"
-    pp db.find({"age" => { "$lt" => 25 } })
-    puts "Third Query"
-    pp db.find({"armor_size" => { "$exists" => true } })
+db.insert({
+    "first_name" => "Joan",
+    "last_name" => "Of Arc",
+    "age" => 15,
+    "armor_size" => "small"
+})
+db.insert({
+    "first_name" => "Joan",
+    "last_name" => "From Madmen",
+    "age" => 30,
+    "lipstick_color" => "red"
+})
+db.insert({
+    "first_name" => "Joan",
+    "last_name" => "Uh (as in Jonah)",
+    "age" => 90,
+    "armor_size" => "medium",
+    "greatest_fear" => "whales"
+})
+puts "First Query"
+pp db.find({"first_name" => "Joan"})
+puts "Second Query"
+pp db.find({"age" => { "$lt" => 25 } })
+puts "Third Query"
+pp db.find({"armor_size" => { "$exists" => true } })
+```
 
 which would output:
 
-    First Query
-    [{"first_name"=>"Joan",
-      "last_name"=>"Of Arc",
-      "age"=>15,
-      "armor_size"=>"small",
-      "id"=>0},
-     {"first_name"=>"Joan",
-      "last_name"=>"From Madmen",
-      "age"=>30,
-      "lipstick_color"=>"red",
-      "id"=>1},
-     {"first_name"=>"Joan",
-      "last_name"=>"Uh (as in Jonah)",
-      "age"=>90,
-      "armor_size"=>"medium",
-      "greatest_fear"=>"whales",
-      "id"=>2}]
-    Second Query
-    [{"first_name"=>"Joan",
-      "last_name"=>"Of Arc",
-      "age"=>15,
-      "armor_size"=>"small",
-      "id"=>0}]
-    Third Query
-    [{"first_name"=>"Joan",
-      "last_name"=>"Of Arc",
-      "age"=>15,
-      "armor_size"=>"small",
-      "id"=>0},
-     {"first_name"=>"Joan",
-      "last_name"=>"Uh (as in Jonah)",
-      "age"=>90,
-      "armor_size"=>"medium",
-      "greatest_fear"=>"whales",
-      "id"=>2}]
+```text
+First Query
+[{"first_name"=>"Joan",
+  "last_name"=>"Of Arc",
+  "age"=>15,
+  "armor_size"=>"small",
+  "id"=>0},
+ {"first_name"=>"Joan",
+  "last_name"=>"From Madmen",
+  "age"=>30,
+  "lipstick_color"=>"red",
+  "id"=>1},
+ {"first_name"=>"Joan",
+  "last_name"=>"Uh (as in Jonah)",
+  "age"=>90,
+  "armor_size"=>"medium",
+  "greatest_fear"=>"whales",
+  "id"=>2}]
+Second Query
+[{"first_name"=>"Joan",
+  "last_name"=>"Of Arc",
+  "age"=>15,
+  "armor_size"=>"small",
+  "id"=>0}]
+Third Query
+[{"first_name"=>"Joan",
+  "last_name"=>"Of Arc",
+  "age"=>15,
+  "armor_size"=>"small",
+  "id"=>0},
+ {"first_name"=>"Joan",
+  "last_name"=>"Uh (as in Jonah)",
+  "age"=>90,
+  "armor_size"=>"medium",
+  "greatest_fear"=>"whales",
+  "id"=>2}]
+```
+
 TODO
 ----
 
@@ -106,56 +111,58 @@ Supported Query Syntax
 
 For now, I'll document the features by pasting the Rspec -f doc output
 
-    rspec -f doc spec/mongo_lite_db_spec.rb
+```
+rspec -f doc spec/mongo_lite_db_spec.rb
 
-    MongoLiteDB
-      should initialize db file
-      when using a single object
-        should allow insertion
-        should allow retrieval
-        should allow update
-        should allow deletion
-      insert
-        should add an id to record
-        should accept duplicate entries
-        should autoincrement id on each insert
-        should make a copy of object on insert
-        should allow batch inserts
-      find
-        should support multiple keyword conditions
-        $or operator
-          should return entries that match either condition
-          should allow multiple conditions that are anded together
-          should allow nested $or
-        $nor operator
-          should return entries that do not match any of the conditions (PENDING: just haven't done it yet)
-        $and operator
-          should return entries that match all of the conditions (PENDING: there's an implicit $and already and I don't want to take the time to do the explicit one yet)
-        $in operator
-          should return entries that match any of the values
-        $nin operator
-          should return entries that do not match given values
-        $exists operator
-          should return entries that have the field defined when true
-          should return entries that do not have the field defined when false
-        numerical operations
-          $gt
-            should return entries where field is greater than the value
-          $gte
-            should return entries where field is greater than or equal to the value
-          $lt
-            should return entries where field is less than the value
-          $lte
-            should return entries where field is less than or equal to the value
-          $ne
-            should return entries where field is not equal to the value
-          $mod
-            should entries where the field value divided by the divisor has the specified remainder
+MongoLiteDB
+  should initialize db file
+  when using a single object
+    should allow insertion
+    should allow retrieval
+    should allow update
+    should allow deletion
+  insert
+    should add an id to record
+    should accept duplicate entries
+    should autoincrement id on each insert
+    should make a copy of object on insert
+    should allow batch inserts
+  find
+    should support multiple keyword conditions
+    $or operator
+      should return entries that match either condition
+      should allow multiple conditions that are anded together
+      should allow nested $or
+    $nor operator
+      should return entries that do not match any of the conditions (PENDING: just haven't done it yet)
+    $and operator
+      should return entries that match all of the conditions (PENDING: there's an implicit $and already and I don't want to take the time to do the explicit one yet)
+    $in operator
+      should return entries that match any of the values
+    $nin operator
+      should return entries that do not match given values
+    $exists operator
+      should return entries that have the field defined when true
+      should return entries that do not have the field defined when false
+    numerical operations
+      $gt
+        should return entries where field is greater than the value
+      $gte
+        should return entries where field is greater than or equal to the value
+      $lt
+        should return entries where field is less than the value
+      $lte
+        should return entries where field is less than or equal to the value
+      $ne
+        should return entries where field is not equal to the value
+      $mod
+        should entries where the field value divided by the divisor has the specified remainder
 
-    Pending:
-      MongoLiteDB find $nor operator should return entries that do not match any of the conditions
-        # just haven't done it yet
-        # ./spec/mongo_lite_db_spec.rb:117
-      MongoLiteDB find $and operator should return entries that match all of the conditions
-        # there's an implicit $and already and I don't want to take the time to do the explicit one yet
-        # ./spec/mongo_lite_db_spec.rb:122
+Pending:
+  MongoLiteDB find $nor operator should return entries that do not match any of the conditions
+    # just haven't done it yet
+    # ./spec/mongo_lite_db_spec.rb:117
+  MongoLiteDB find $and operator should return entries that match all of the conditions
+    # there's an implicit $and already and I don't want to take the time to do the explicit one yet
+    # ./spec/mongo_lite_db_spec.rb:122
+```
