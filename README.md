@@ -20,7 +20,13 @@ The project came about via a random weekend hack. I wanted to play around with s
 Performance
 -----------
 
-Performance sucks. I haven't even bothered to benchmark it yet. I'm literally dumping one big json object to a file. To perform queries, I read it in and iterate over every document that is nested inside it. Performance is therefore O(n) where n is the number of documents in the database. But I don't really care. For my use case, performance is overrated.
+Performance sucks. As of version 0.0.2:
+
+![Insertion Benchmarks](https://docs.google.com/spreadsheet/oimg?key=0AqV2RNwagAQrdERYOFh5NWcwWEZPcGFETmRLWnRNbUE&oid=2&zx=hwquzhzg2did)
+
+![Read Benchmarks](https://docs.google.com/spreadsheet/oimg?key=0AqV2RNwagAQrdERYOFh5NWcwWEZPcGFETmRLWnRNbUE&oid=3&zx=arm3yh2yayv3)
+
+I'm literally dumping one big json object to a file. To perform queries, I read it in and iterate over every document that is nested inside it. Performance is therefore O(n) where n is the number of documents in the database. But I don't really care. For my use case, performance is overrated. It should be more than adequate for databases with less than 1000 entries.
 
 Usage
 -----
@@ -28,7 +34,7 @@ Usage
 It was designed to be query compatible with MongoDB. I haven't implemented everything, but quite a bit is done. An example of usage is as follows:
 
 ```ruby
-require './mongo_lite_db.rb'
+require 'mongolitedb'
 require 'pp'
 
 filename = "demo.mglite"
@@ -112,7 +118,7 @@ Supported Query Syntax
 Look at [MongoDB Query Language](http://docs.mongodb.org/manual/reference/operators/ "MongoDB Query Language"). Not everything is supported yet. For now I'll document the implemented features by pasting the Rspec -f doc output
 
 ```
-rspec -f doc spec/mongo_lite_db_spec.rb
+rspec -f doc spec/mongolitedb_spec.rb
 
 MongoLiteDB
   should initialize db file
