@@ -1,4 +1,4 @@
-require_relative '../mongo_lite_db.rb'
+require_relative '../lib/mongolitedb.rb'
 require 'fileutils'
 
 describe MongoLiteDB do
@@ -115,12 +115,26 @@ describe MongoLiteDB do
     end
     describe "$nor operator" do
         it "should return entries that do not match any of the conditions" do
-            pending("just haven't done it yet")
+            obj1 = {"name" => "peter"}
+            obj2 = {"number" => 22}
+            obj3 = {"number" => 24}
+            @db.insert [obj1, obj2, obj3]
+            @db.find({"$nor" => [
+                {"name" => "peter"},
+                {"number" => 22} 
+            ]}).count.should be(1)
         end
     end
     describe "$and operator" do
         it "should return entries that match all of the conditions" do
-            pending("there's an implicit $and already and I don't want to take the time to do the explicit one yet")
+          obj1 = {"name" => "peter"}
+          obj2 = {"number" => 22}
+          obj3 = {"number" => 22, "age" => 25}
+          @db.insert [obj1, obj2, obj3]
+          @db.find({"$and" => [
+              {"number" => 22},
+              {"age" => 25} 
+          ]}).count.should be(1)
         end
     end
     describe "$in operator" do
@@ -216,6 +230,16 @@ describe MongoLiteDB do
               matched_ages.empty?.should be_true
         end
       end
+    end
+    it "should support querying nested documents" do
+      obj1 = {"owner" => {"name" => "Joe", "age" => 25}}
+      @db.insert obj1
+      @db.find({"owner.name" => "Joe"}).count.should eq(1)
+    end
+    it "should return empty set if nested documents do not exist" do
+      obj1 = {"owner" => {"name" => "Joe", "age" => 25}}
+      @db.insert obj1
+      @db.find({"author.name" => "Joe"}).count.should eq(0)
     end
     it "should support multiple keyword conditions" do
       obj1 = {"number" => 22}
