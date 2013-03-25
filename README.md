@@ -104,12 +104,12 @@ Third Query
 TODO
 ----
 
-My biggest TODO is to support nested data structures. Right now find only works on top level keys. Also in the works will be building a gem. Documentation would also be good.
+Documentation would be good. I haven't used it very extensively yet, so the next goal is to work out the bugs I must have created.
 
 Supported Query Syntax
 ----------------------
 
-For now, I'll document the features by pasting the Rspec -f doc output
+Look at [MongoDB Query Language](http://docs.mongodb.org/manual/reference/operators/ "MongoDB Query Language"). Not everything is supported yet. For now I'll document the implemented features by pasting the Rspec -f doc output
 
 ```
 rspec -f doc spec/mongo_lite_db_spec.rb
