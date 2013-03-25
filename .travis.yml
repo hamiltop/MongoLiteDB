@@ -2,4 +2,4 @@ language: ruby
 rvm:
   - 2.0.0
   - 1.9.3
-script: bundle exec rspec -f doc spec/mongo_lite_db_spec.rb
+script: bundle exec rake

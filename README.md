@@ -128,15 +128,17 @@ MongoLiteDB
     should make a copy of object on insert
     should allow batch inserts
   find
+    should support querying nested documents
+    should return empty set if nested documents do not exist
     should support multiple keyword conditions
     $or operator
       should return entries that match either condition
       should allow multiple conditions that are anded together
       should allow nested $or
     $nor operator
-      should return entries that do not match any of the conditions (PENDING: just haven't done it yet)
+      should return entries that do not match any of the conditions
     $and operator
-      should return entries that match all of the conditions (PENDING: there's an implicit $and already and I don't want to take the time to do the explicit one yet)
+      should return entries that match all of the conditions
     $in operator
       should return entries that match any of the values
     $nin operator
@@ -157,12 +159,4 @@ MongoLiteDB
         should return entries where field is not equal to the value
       $mod
         should entries where the field value divided by the divisor has the specified remainder
-
-Pending:
-  MongoLiteDB find $nor operator should return entries that do not match any of the conditions
-    # just haven't done it yet
-    # ./spec/mongo_lite_db_spec.rb:117
-  MongoLiteDB find $and operator should return entries that match all of the conditions
-    # there's an implicit $and already and I don't want to take the time to do the explicit one yet
-    # ./spec/mongo_lite_db_spec.rb:122
 ```
